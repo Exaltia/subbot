@@ -42,6 +42,7 @@
 
 #+RESULTS:
 [[file:img/manage_orders.png]]
+
 * References
 * Ideas
 - Not discord roles, but the bot could handle a job queue system and people could be able to register on some job types
