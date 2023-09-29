@@ -65,14 +65,16 @@
   create j
   s -> j : Creates
   activate j
-  w -> s : Register
-  s -> j : Select job
-  w <- j : Assigned job
-  activate w
-  w -> j : Complete job
-  deactivate w
-  j -> o : Update order
-  m <- s : Notify Manager
+  loop
+    w -> s : Register
+    s -> j : Select job
+    w <- j : Assigned job
+    activate w
+    w -> j : Complete job
+    deactivate w
+    j -> o : Update order
+    m <- s : Notify Manager
+  end
   deactivate j
   j -> o : No more jobs
   destroy j
