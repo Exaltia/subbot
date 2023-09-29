@@ -1,0 +1,51 @@
+#+title: Subbot
+#+filetags: :subbot:
+
+* Goals
+** Manage =orders=
+*** =Manager= can create =orders= based on a discord role
+*** =Subbot= can split orders into different =jobs= 
+*** =Worker= can subscribe to an =order= by choosing =job types=
+*** =Manager= can follow the completion of orders
+*** =Subbot= can ping the =delivery= role when an =order= is complete
+
+** Give people work based on =job types=
+*** =Subbot= keeps track on the different jobs
+*** =Subbot= offers available jobs to =workers=
+
+** Manage a database of =parts= and =mats= needed
+
+** Manage payments
+
+** Use cases diagrams
+#+begin_src plantuml :file img/manage_orders.png
+  @startuml
+  skinparam actorStyle awesome
+  left to right direction
+  actor Manager as m
+  actor Worker as w
+  actor Subbot as b
+
+  rectangle Order {
+    usecase "Create\norder" as Create
+    usecase "Register as\nworker" as Register
+    usecase "Follow\norder" as Follow
+    usecase "Split\norder" as Jobs
+  }
+  m -> Create
+  m -> Follow
+  w -> Register : Choose job types
+  b -> Jobs
+  b -> Follow
+  @enduml
+#+end_src
+
+#+RESULTS:
+[[file:img/manage_orders.png]]
+* References
+* Ideas
+- Not discord roles, but the bot could handle a job queue system and people could be able to register on some job types
+Like you type /gimmework
+The bot replies with a prompt of the jobs available. You choose some on them. 
+THen the bot replies with your next job.
+
