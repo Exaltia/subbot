@@ -47,6 +47,7 @@
 
 #+RESULTS:
 [[file:img/manage_orders.png]]
+
 ** Lifecycle of an order
 [[file:img/lifecycle_order.png]]
 
