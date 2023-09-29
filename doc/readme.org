@@ -59,28 +59,33 @@
   actor Subbot as s
   participant Order as o
   collections Jobs as j
-  m -> o : Creates
+
+  m -> s : Create new order
+  create o
+  s -> o : Creates
   activate o
   s <- o : Notifies bot
   create j
   s -> j : Creates
   activate j
   loop
-    w -> s : Register
-    s -> j : Select job
-    w <- j : Assigned job
+    w -> s : Register as worker
+    s -> j : Select job by job-type
+    j -> s : Unqueue a job
+    w <- s : Assign job
     activate w
-    w -> j : Complete job
+    w -> s : Complete job
     deactivate w
-    j -> o : Update order
+    s -> o : Update order
     m <- s : Notify Manager
   end
   deactivate j
-  j -> o : No more jobs
+  j -> s : No more jobs
   destroy j
-  o -> m : Ready for delivery
+  s -> m : Ready for delivery
   m -> m : delivers
-  m -> o : Complete order
+  m -> s : Mark order as completed
+  s -> o : Archive order
   destroy o
 
   @enduml
