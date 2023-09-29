@@ -10,14 +10,19 @@
 *** =Subbot= can ping the =delivery= role when an =order= is complete
 
 ** Give people work based on =job types=
-*** =Subbot= keeps track on the different jobs
+*** =Subbot= keeps track on the different =jobs=
 *** =Subbot= offers available jobs to =workers=
 
 ** Manage a database of =parts= and =mats= needed
+*** =Subbot= helps deciding if =Worker= has to craft or buy =mats=
+*** =Subbot= keeps a stock
 
 ** Manage payments
 
-** Use cases diagrams
+* Use cases diagrams
+** Managing orders
+[[file:img/manage_orders.png]]
+
 #+begin_src plantuml :file img/manage_orders.png
   @startuml
   skinparam actorStyle awesome
@@ -42,6 +47,44 @@
 
 #+RESULTS:
 [[file:img/manage_orders.png]]
+** Lifecycle of an order
+[[file:img/lifecycle_order.png]]
+
+#+begin_src plantuml :file img/lifecycle_order.png
+  @startuml
+  hide footbox
+  actor Manager as m
+  actor Worker as w
+  actor Subbot as s
+  participant Order as o
+  collections Jobs as j
+  m -> o : Creates
+  activate o
+  s <- o : Notifies bot
+  create j
+  s -> j : Creates
+  activate j
+  w -> s : Register
+  s -> j : Select job
+  w <- j : Assigned job
+  activate w
+  w -> j : Complete job
+  deactivate w
+  j -> o : Update order
+  m <- s : Notify Manager
+  deactivate j
+  j -> o : No more jobs
+  destroy j
+  o -> m : Ready for delivery
+  m -> m : delivers
+  m -> o : Complete order
+  destroy o
+
+  @enduml
+#+end_src
+
+#+RESULTS:
+[[file:img/lifecycle_order.png]]
 
 * References
 * Ideas
