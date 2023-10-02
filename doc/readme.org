@@ -100,6 +100,8 @@
 ** Anatomy of an order
 *** Jobs
 
+[[file:img/Job_types.png]]
+
 #+begin_src plantuml :file img/Job_types.png
   @startuml
 
@@ -125,6 +127,8 @@
 [[file:img/Job_types.png]]
 
 *** Order details
+
+[[file:img/Anatomy_order.png]]
 
 #+begin_src plantuml :file img/Anatomy_order.png
   @startuml
