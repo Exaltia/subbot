@@ -98,6 +98,41 @@
 [[file:img/lifecycle_order.png]]
 
 ** Anatomy of an order
+*** FFItem
+FFItem is a representation of an item from the game.
+marketValue is:
+- fixed for raw_mat
+- calculated for middle_mat and sub_part
+
+[[file:img/FFItem.png]]
+
+#+begin_src plantuml :file img/FFItem.png
+  @startuml
+
+  class FFItem {
+    id : Integer
+    name : String
+    itemType : Enum
+    marketValue : Float
+    craftingMatsList : Array of FFItem, quantity
+
+    craftingValue()
+    updateMarketValue()
+  }
+
+  note left of FFItem::itemType
+    itemType can be
+    - sub_part
+    - middle_mat
+    - raw_mat
+  end note
+
+  @enduml
+#+end_src
+
+#+RESULTS:
+[[file:img/FFItem.png]]
+
 *** Jobs
 
 [[file:img/Job_types.png]]
@@ -147,13 +182,6 @@
   }
 
   Order "1" *-- "many" OrderItem : contains
-
-
-  class FFItem {
-    id : Integer
-    name : String
-    type : Enum
-  }
 
   @enduml
 #+end_src
