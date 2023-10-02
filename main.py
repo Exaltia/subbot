@@ -1,50 +1,22 @@
 import discord
-import asyncio
+from discord import option
 import configparser
-from discord import app_commands
 configuration = configparser.ConfigParser()
 configuration.read('config.ini')
 token = configuration['DEFAULT']['token']
-commands = discord.app_commands
-intents = discord.Intents.none()
-client = discord.Client(intents=intents)
-tree = app_commands.CommandTree(client)
-class OtherButtons(discord.ui.View):
-    def __init__(self, *, timeout=180):
-        super().__init__(timeout=timeout)
-    @discord.ui.button(label="Button",style=discord.ButtonStyle.blurple)
-    async def useless1(self,interaction:discord.Interaction, button:discord.ui.Button):
-        pass
-    @discord.ui.button(label="Button", style=discord.ButtonStyle.green)
-    async def useless(self,interaction:discord.Interaction, button:discord.ui.Button):
-        pass
-    @discord.ui.button(label="Button", style=discord.ButtonStyle.red)
-    async def grey_button(self,interaction:discord.Interaction, button:discord.ui.Button):
-        pass
-class Buttons(discord.ui.View):
-    def __init__(self, *, timeout=180):
-        super().__init__(timeout=timeout)
-    @discord.ui.button(label="Button",style=discord.ButtonStyle.red)
-    # view=self lead to the addition of the same button under every bot answer
-    async def grey_button(self,interaction:discord.Interaction, button:discord.ui.Button):
-        await interaction.response.send_message(content=f"This is an edited button response!", view=OtherButtons())
 
+bot = discord.Bot()
 
-@tree.command(name = "slashtest", description = "My first application Command")
-async def first_command(interaction):
-    await interaction.response.send_message("You're the worst employee of the month, no work for you!")
-
-@tree.command(name="buttontest", description="My first button Command")
-async def second_command(interaction):
-    await interaction.response.send_message("You're the worst employee of the month, no work for you!", view=Buttons())
-
-def bidule():
-    pass
-@client.event
+@bot.event
 async def on_ready():
-    # According to examples, if guildid is not specified, slash command registration can take up to one hour.
-    # guild id format : guild=discord.Object(id=12417128931)
-    # New command added to the bot also need a reload of discord client, userside, or new command does not appears
-    await tree.sync()
-if __name__ == "__main__":
-    client.run(token)
+    print(f"We have logged in as {bot.user}")
+
+@bot.slash_command()
+@option("number", description="enter the number of parts needed", min_value=1, max_value=9999)
+@option('submarine_type', description="Choose the submarine type", choices=["Shark", "Whale", "Coelacanth", "Unkiu"])
+@option("part_type", description="Choose the submarine part type", choices=["Stern", "Bow", "Hull", "Bridge"])
+@option("modified", description="Choose Modifier if you build modified parts", choices=["Modified", "Normal"])
+async def hello(ctx: discord.ApplicationContext, number: int, submarine_type: str, part_type: str, modified: str):
+    await ctx.respond(f"Order of {number} {modified} {submarine_type} {part_type} submarines added! (or not)")
+
+bot.run(token)
