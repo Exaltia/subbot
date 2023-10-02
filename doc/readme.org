@@ -8,6 +8,7 @@
 *** =Worker= can subscribe to an =order= by choosing =job types=
 *** =Manager= can follow the completion of orders
 *** =Subbot= can ping the =delivery= role when an =order= is complete
+*** =Subbot= can create a Teamcraft list
 
 ** Give people work based on =job types=
 *** =Subbot= keeps track on the different =jobs=
@@ -18,8 +19,10 @@
 *** =Subbot= keeps a stock
 
 ** Manage payments
+*** Keeps track of who does what
+*** Update =mats= prices
 
-* Use cases diagrams
+* UML diagrams
 ** Managing orders
 [[file:img/manage_orders.png]]
 
@@ -93,6 +96,66 @@
 
 #+RESULTS:
 [[file:img/lifecycle_order.png]]
+
+** Anatomy of an order
+*** Jobs
+
+#+begin_src plantuml :file img/Job_types.png
+  @startuml
+
+  class Job {
+    id : Integer
+    jobContent : Array of FFItem, Quantity
+    jobType : Enum
+    worker : Worker
+    pay()
+  }
+
+  note left of Job::jobType
+    jobType can be
+    - assembling
+    - quicksynthing
+    - shopping
+  end note
+
+  @enduml
+#+end_src
+
+#+RESULTS:
+[[file:img/Job_types.png]]
+
+*** Order details
+
+#+begin_src plantuml :file img/Anatomy_order.png
+  @startuml
+
+  class Order {
+    id : Integer
+    customer : String
+    deliveryDate : Date
+    status : Enum
+    shoppingList()
+  }
+
+  class OrderItem {
+    item : FFItem
+    quantity : Integer
+  }
+
+  Order "1" *-- "many" OrderItem : contains
+
+
+  class FFItem {
+    id : Integer
+    name : String
+    type : Enum
+  }
+
+  @enduml
+#+end_src
+
+#+RESULTS:
+[[file:img/Anatomy_order.png]]
 
 * References
 * Ideas
