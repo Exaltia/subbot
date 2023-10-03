@@ -97,42 +97,65 @@
 #+RESULTS:
 [[file:img/lifecycle_order.png]]
 
-** Anatomy of an order
+** Item Database
+*** ItemDB
+ItemDB is an array of items relevant for subbot.
+It contains a version for the database structure, and entries for items known as =FFItem=.
+
 *** FFItem
-FFItem is a representation of an item from the game.
-marketValue is:
+FFItem is a representation of an item from the game. marketValue is:
 - fixed for raw_mat
 - calculated for middle_mat and sub_part
 
-[[file:img/FFItem.png]]
+[[file:img/ItemDB.png]]
 
-#+begin_src plantuml :file img/FFItem.png
+#+begin_src plantuml :file img/ItemDB.png
   @startuml
-
-  class FFItem {
+  
+  class ItemDB {
+    version : string
+    data : array of <<FFItems>>
+    addItem()
+  }
+  
+  entity FFItem {
     id : Integer
     name : String
-    itemType : Enum
     marketValue : Float
-    craftingMatsList : Array of FFItem, quantity
-
+    itemType : <<Enum>>
+    acquisition: <<Enum>>
+    isCrafted: Bool
+    .. isCrafted = True ..
+    craftingMatsList : Array of FFItem.id, quantity
+    __
     craftingValue()
     updateMarketValue()
   }
-
-  note left of FFItem::itemType
-    itemType can be
-    - sub_part
-    - middle_mat
-    - raw_mat
-  end note
-
+  
+  enum itemType {
+    sub_part
+    middle_mat
+    raw_mat
+  }
+  
+  enum acquisition {
+    gathering
+    MB
+    vendor
+    crafting
+  }
+  
+  ItemDB "1" *-- "many" FFItem : contains
+  itemType - acquisition
+  FFItem *-- (itemType, acquisition)
+  
   @enduml
 #+end_src
 
 #+RESULTS:
-[[file:img/FFItem.png]]
+[[file:img/ItemDB.png]]
 
+** Anatomy of an order
 *** Jobs
 
 [[file:img/Job_types.png]]
